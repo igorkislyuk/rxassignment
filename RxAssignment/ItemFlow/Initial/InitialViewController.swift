@@ -14,12 +14,13 @@ import RxRealm
 
 import RealmSwift
 
-class InitialViewController: UIViewController {
+class InitialViewController: UIViewController, InitialView {
     
     @IBOutlet weak var tableView: UITableView!
     
     let disposeBag = DisposeBag()
     
+    var openDetail: ((Int) -> ())?
     var fetcher: WallItemFetcher = NetworkingManager()
     
     override func viewDidLoad() {
@@ -33,15 +34,33 @@ class InitialViewController: UIViewController {
     }
     
     private func bindTable() {
+        
         do {
-            
             let realm = try Realm()
+            
             Observable.collection(from: realm.objects(WallItem.self).sorted(byKeyPath: "id", ascending: false))
                 .bindTo(tableView.rx.items(cellIdentifier: "Cell", cellType: WallCell.self) ) {
                     (_, item, cell) in
                     cell.itemTextLabel.text = item.text
                     cell.itemIDLabel.text = String(item.id)
                 }.disposed(by: disposeBag)
+            
+            tableView.rx
+                .modelSelected(WallItem.self)
+                .asDriver()
+                .drive(onNext: {
+                    [weak self]
+                    (item) in
+                    self?.openDetail?(item.id)
+                }).addDisposableTo(disposeBag)
+            
+            tableView.rx
+                .itemSelected
+                .asDriver()
+                .drive(onNext: {
+                    [weak self] (indexPath) in
+                    self?.tableView.deselectRow(at: indexPath, animated: true)
+                }).addDisposableTo(disposeBag)
             
         } catch {
             debugPrint(error.localizedDescription)
@@ -81,15 +100,12 @@ class InitialViewController: UIViewController {
                     }
                     
                 })
-                
-                
-                realm.add(items)
             }
             
         } catch {
             debugPrint(error.localizedDescription)
         }
-
+        
     }
     
     private func setupTableView() {

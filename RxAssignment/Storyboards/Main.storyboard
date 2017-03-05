@@ -117,6 +117,10 @@
                             <constraint firstAttribute="trailing" secondItem="YJ9-gG-MtW" secondAttribute="trailing" constant="20" symbolic="YES" id="p0U-pI-zCO"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="addButton" destination="j8v-U4-7fa" id="KZb-AV-OQb"/>
+                        <outlet property="textView" destination="YJ9-gG-MtW" id="n4O-fO-p7A"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kze-KM-C1o" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

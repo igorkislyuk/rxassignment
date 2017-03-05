@@ -5,11 +5,6 @@
 
 import Foundation
 
-import RealmSwift
-
-class WallItem: Object {
-
-    dynamic var id: Int = 0
-    dynamic var text: String = ""
-    
+protocol DetailView: Presentable {
+    func setupWith(detailID id: Int)
 }

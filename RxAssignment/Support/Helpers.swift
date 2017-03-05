@@ -23,3 +23,14 @@ extension NSObject {
         return NSStringFromClass(self).components(separatedBy: ".").last!
     }
 }
+
+protocol Presentable {
+    func toPresent() -> UIViewController
+}
+
+extension UIViewController: Presentable {
+
+    func toPresent() -> UIViewController {
+        return self
+    }
+}

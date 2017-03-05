@@ -16,14 +16,15 @@ class ApplicationCoordinator: BaseCoordinator {
 
     override func start() {
         navigationController.onViewDidLoad = {
+            [weak self]
             navigationController in
             if navigationController.viewControllers.isEmpty {
 
                 let itemCoordinator = ItemCoordinator(navigationController)
 
                 itemCoordinator.start()
-
-
+                
+                self?.addDependency(itemCoordinator)
             }
         }
     }
